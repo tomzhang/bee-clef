@@ -2,7 +2,7 @@
 ###
  # @Author: your name
  # @Date: 2021-05-18 15:14:17
- # @LastEditTime: 2021-05-18 16:37:09
+ # @LastEditTime: 2021-06-07 11:15:52
  # @LastEditors: Please set LastEditors
  # @Description: In User Settings Edit
  # @FilePath: /bee-clef/packaging/cashout.sh
@@ -52,7 +52,9 @@ function getUncashedAmount() {
 
 function cashout() {
   local peer=$1
-  txHash=$(curl -s -XPOST "$DEBUG_API/chequebook/cashout/$peer" | jq -r .transactionHash)
+  local response=$(curl -s -XPOST -H "gas-price: 800000000000" "$DEBUG_API/chequebook/cashout/$peer")
+  local txHash=$(echo "$response" | jq -r .transactionHash)
+  #txHash=$(curl -s -XPOST "$DEBUG_API/chequebook/cashout/$peer" | jq -r .transactionHash)
 
   echo cashing out cheque for $peer in transaction $txHash >&2
 
